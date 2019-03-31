@@ -19,6 +19,8 @@ HOST_OS:=$(shell uname -s)
 
 #DEBUG=-O0 -gdwarf-2 -g3 -Wno-format-truncation
 
+FF_IXY=${TOPDIR}/ixy
+
 FF_KNI=1
 #FF_NETGRAPH=1
 #FF_IPFW=1
@@ -41,11 +43,11 @@ else
 endif
 endif
 
-DPDK_CFLAGS= -Wall -Werror -include ${FF_DPDK}/include/rte_config.h
-DPDK_CFLAGS+= -march=native -DRTE_MACHINE_CPUFLAG_SSE -DRTE_MACHINE_CPUFLAG_SSE2 -DRTE_MACHINE_CPUFLAG_SSE3
-DPDK_CFLAGS+= -DRTE_MACHINE_CPUFLAG_SSSE3 -DRTE_MACHINE_CPUFLAG_SSE4_1 -DRTE_MACHINE_CPUFLAG_SSE4_2
-DPDK_CFLAGS+= -DRTE_COMPILE_TIME_CPUFLAGS=RTE_CPUFLAG_SSE,RTE_CPUFLAG_SSE2,RTE_CPUFLAG_SSE3,RTE_CPUFLAG_SSSE3,RTE_CPUFLAG_SSE4_1,RTE_CPUFLAG_SSE4_2
-DPDK_CFLAGS+= -I${FF_DPDK}/include
+#DPDK_CFLAGS= -Wall -Werror -include ${FF_DPDK}/include/rte_config.h
+#DPDK_CFLAGS+= -march=native -DRTE_MACHINE_CPUFLAG_SSE -DRTE_MACHINE_CPUFLAG_SSE2 -DRTE_MACHINE_CPUFLAG_SSE3
+#DPDK_CFLAGS+= -DRTE_MACHINE_CPUFLAG_SSSE3 -DRTE_MACHINE_CPUFLAG_SSE4_1 -DRTE_MACHINE_CPUFLAG_SSE4_2
+#DPDK_CFLAGS+= -DRTE_COMPILE_TIME_CPUFLAGS=RTE_CPUFLAG_SSE,RTE_CPUFLAG_SSE2,RTE_CPUFLAG_SSE3,RTE_CPUFLAG_SSSE3,RTE_CPUFLAG_SSE4_1,RTE_CPUFLAG_SSE4_2
+#DPDK_CFLAGS+= -I${FF_DPDK}/include
 
 KERNPREINCLUDES:= ${INCLUDES}
 INCLUDES= -I${OVERRIDE_INCLUDES_ROOT} ${KERNPREINCLUDES}
@@ -187,17 +189,17 @@ FF_SRCS+=                   \
 endif
 
 FF_HOST_SRCS+=              \
-	ff_host_interface.c \
+#	ff_host_interface.c \
 	ff_config.c         \
 	ff_ini_parser.c     \
-	ff_dpdk_if.c        \
-	ff_dpdk_pcap.c      \
+#	ff_dpdk_if.c        \
+#	ff_dpdk_pcap.c      \
 	ff_epoll.c          \
 	ff_init.c
 
 ifdef FF_KNI
 FF_HOST_SRCS+=              \
-	ff_dpdk_kni.c
+#	ff_dpdk_kni.c
 endif
 
 ifdef FF_IPSEC

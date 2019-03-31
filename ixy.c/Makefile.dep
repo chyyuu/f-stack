@@ -1,0 +1,2 @@
+memory.o: memory.c memory.h log.h
+pci.o: pci.c pci.h log.h

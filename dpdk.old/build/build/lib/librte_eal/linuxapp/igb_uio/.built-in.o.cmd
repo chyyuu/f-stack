@@ -1,0 +1,1 @@
+cmd_/media/chyyuu/chydata/thecode/net-related/f-stack/dpdk/build/build/lib/librte_eal/linuxapp/igb_uio/built-in.o :=  rm -f /media/chyyuu/chydata/thecode/net-related/f-stack/dpdk/build/build/lib/librte_eal/linuxapp/igb_uio/built-in.o; ar rcSTPD /media/chyyuu/chydata/thecode/net-related/f-stack/dpdk/build/build/lib/librte_eal/linuxapp/igb_uio/built-in.o
