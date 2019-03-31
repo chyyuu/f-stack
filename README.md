@@ -1,3 +1,13 @@
+# for ixy
+```
+cd ixy.c
+make
+cd ../lib
+make
+cd ../example
+make
+```
+
 [![Build Status](https://travis-ci.org/F-Stack/f-stack.svg?branch=master)](https://travis-ci.org/F-Stack/f-stack)
 
 # F-Stack
