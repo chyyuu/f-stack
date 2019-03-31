@@ -53,6 +53,8 @@ KERNPREINCLUDES:= ${INCLUDES}
 INCLUDES= -I${OVERRIDE_INCLUDES_ROOT} ${KERNPREINCLUDES}
 INCLUDES+= -I./machine_include
 INCLUDES+= -I./opt
+#for ixy.c
+INCLUDES+= -I../ixy.c
 
 # Include search path for files that only include host OS headers
 HOST_INCLUDES= -I.

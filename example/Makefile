@@ -16,8 +16,8 @@ LIBS+= -Wl,--no-whole-archive -lrt -lm -ldl -lcrypto -pthread -lnuma
 
 TARGET="helloworld"
 all:
-	cc -O -gdwarf-2  -I../lib -o ${TARGET} main.c ${LIBS}
-	cc -O -gdwarf-2  -I../lib -o ${TARGET}_epoll main_epoll.c ${LIBS}
+	cc -O -gdwarf-2  -I../lib -I../ixy.c -o ${TARGET} main.c ${LIBS}
+#	cc -O -gdwarf-2  -I../lib -o ${TARGET}_epoll main_epoll.c ${LIBS}
 
 .PHONY: clean
 clean:

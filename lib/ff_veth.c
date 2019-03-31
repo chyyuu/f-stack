@@ -56,7 +56,17 @@
 
 #include "ff_veth.h"
 #include "ff_config.h"
-#include "ff_dpdk_if.h"
+//#include "ff_dpdk_if.h"
+
+#define ff_IF_NAME "f-stack-%d"
+
+struct ff_tx_offload {
+    uint8_t ip_csum;
+    uint8_t tcp_csum;
+    uint8_t udp_csum;
+    uint8_t sctp_csum;
+    uint16_t tso_seg_size;
+};
 
 struct ff_veth_softc {
     struct ifnet *ifp;
@@ -70,6 +80,56 @@ struct ff_veth_softc {
 
     //struct ff_dpdk_if_context *host_ctx;
 };
+
+
+#define HUGE_PAGE_BITS 21
+#define HUGE_PAGE_SIZE (1 << HUGE_PAGE_BITS)
+#define SIZE_PKT_BUF_HEADROOM 40
+
+struct pkt_buf {
+    // physical address to pass a buffer to a nic
+    uintptr_t buf_addr_phy;
+    struct mempool* mempool;
+    uint32_t mempool_idx;
+    uint32_t size;
+    uint8_t head_room[SIZE_PKT_BUF_HEADROOM];
+    uint8_t data[] __attribute__((aligned(64)));
+};
+
+// everything here contains virtual addresses, the mapping to physical addresses are in the pkt_buf
+struct mempool {
+    void* base_addr;
+    uint32_t buf_size;
+    uint32_t num_entries;
+    // memory is managed via a simple stack
+    // replacing this with a lock-free queue (or stack) makes this thread-safe
+    uint32_t free_stack_top;
+    // the stack contains the entry id, i.e., base_addr + entry_id * buf_size is the address of the buf
+    uint32_t free_stack[];
+};
+
+struct device_stats {
+    struct ixy_device* device;
+    size_t rx_pkts;
+    size_t tx_pkts;
+    size_t rx_bytes;
+    size_t tx_bytes;
+};
+
+struct ixy_device {
+    const char* pci_addr;
+    const char* driver_name;
+    uint16_t num_rx_queues;
+    uint16_t num_tx_queues;
+    uint32_t (*rx_batch) (struct ixy_device* dev, uint16_t queue_id, struct pkt_buf* bufs[], uint32_t num_bufs);
+    uint32_t (*tx_batch) (struct ixy_device* dev, uint16_t queue_id, struct pkt_buf* bufs[], uint32_t num_bufs);
+    void (*read_stats) (struct ixy_device* dev, struct device_stats* stats);
+    void (*set_promisc) (struct ixy_device* dev, bool enabled);
+    uint32_t (*get_link_speed) (const struct ixy_device* dev);
+};
+
+
+void ixy_tx_batch_busy_wait(struct ixy_device* dev, uint16_t queue_id, struct pkt_buf* bufs[], uint32_t num_bufs);
 
 static int
 ff_veth_config(struct ff_veth_softc *sc, struct ff_port_cfg *cfg)
@@ -243,11 +303,15 @@ ff_veth_process_packet(void *arg, void *m)
     ifp->if_input(ifp, mb);
 }
 
+extern struct ixy_device* ixy_dev;
 static int
 ff_veth_transmit(struct ifnet *ifp, struct mbuf *m)
 {
     struct ff_veth_softc *sc = (struct ff_veth_softc *)ifp->if_softc;
+    struct pkt_buf** bufs=NULL;
     //return ff_dpdk_if_send(sc->host_ctx, (void*)m, m->m_pkthdr.len);
+    //need convert mbuf --> pkt_buf
+    ixy_tx_batch_busy_wait(ixy_dev, 0, bufs, 1);
     return 0;
 }
 

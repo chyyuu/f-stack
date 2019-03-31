@@ -69,14 +69,17 @@ static struct mempool* init_mempool() {
 	return mempool;
 }
 
+struct ixy_device* ixy_dev;
+struct mempool* ixy_mempool;
+
 int main(int argc, char* argv[]) {
 	if (argc != 2) {
 		printf("Usage: %s <pci bus id>\n", argv[0]);
 		return 1;
 	}
 
-	struct mempool* mempool = init_mempool();
-	struct ixy_device* dev = ixy_init(argv[1], 1, 1);
+	ixy_mempool = init_mempool();
+	ixy_dev = ixy_init(argv[1], 1, 1);
 
 	uint64_t last_stats_printed = monotonic_time();
 	uint64_t counter = 0;
