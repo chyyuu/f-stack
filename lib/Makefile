@@ -189,13 +189,14 @@ FF_SRCS+=                   \
 endif
 
 FF_HOST_SRCS+=              \
-#	ff_host_interface.c \
+	ff_host_interface.c \
 	ff_config.c         \
 	ff_ini_parser.c     \
+	ff_epoll.c          \
+	ff_init.c           \
+	ff_missing.c
 #	ff_dpdk_if.c        \
 #	ff_dpdk_pcap.c      \
-	ff_epoll.c          \
-	ff_init.c
 
 ifdef FF_KNI
 FF_HOST_SRCS+=              \

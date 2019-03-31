@@ -40,7 +40,7 @@
 #include <time.h>
 
 #include <openssl/rand.h>
-#include <rte_malloc.h>
+//#include <rte_malloc.h>
 
 #include "ff_host_interface.h"
 #include "ff_errno.h"

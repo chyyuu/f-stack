@@ -68,7 +68,7 @@ struct ff_veth_softc {
     in_addr_t broadcast;
     in_addr_t gateway;
 
-    struct ff_dpdk_if_context *host_ctx;
+    //struct ff_dpdk_if_context *host_ctx;
 };
 
 static int
@@ -177,7 +177,7 @@ ff_mbuf_free(void *m)
 static void
 ff_mbuf_ext_free(struct mbuf *m, void *arg1, void *arg2)
 {
-    ff_dpdk_pktmbuf_free(arg1);
+    //ff_dpdk_pktmbuf_free(arg1);
 }
 
 void *
@@ -247,7 +247,8 @@ static int
 ff_veth_transmit(struct ifnet *ifp, struct mbuf *m)
 {
     struct ff_veth_softc *sc = (struct ff_veth_softc *)ifp->if_softc;
-    return ff_dpdk_if_send(sc->host_ctx, (void*)m, m->m_pkthdr.len);
+    //return ff_dpdk_if_send(sc->host_ctx, (void*)m, m->m_pkthdr.len);
+    return 0;
 }
 
 static void
@@ -345,11 +346,11 @@ ff_veth_setup_interface(struct ff_veth_softc *sc, struct ff_port_cfg *cfg)
 
     ifp->if_capenable = ifp->if_capabilities;
 
-    sc->host_ctx = ff_dpdk_register_if((void *)sc, (void *)sc->ifp, cfg);
-    if (sc->host_ctx == NULL) {
-        printf("%s: Failed to register dpdk interface\n", sc->host_ifname);
-        return -1;
-    }
+//    sc->host_ctx = ff_dpdk_register_if((void *)sc, (void *)sc->ifp, cfg);
+//    if (sc->host_ctx == NULL) {
+//        printf("%s: Failed to register dpdk interface\n", sc->host_ifname);
+//        return -1;
+//    }
 
     //set ip
     int ret = ff_veth_setaddr(sc);
@@ -388,12 +389,12 @@ ff_veth_attach(struct ff_port_cfg *cfg)
         goto fail;
     }
 
-    return sc->host_ctx;
-
+    //return sc->host_ctx;
+    return NULL;
 fail:
     if (sc) {
-        if (sc->host_ctx)
-            ff_dpdk_deregister_if(sc->host_ctx);
+//        if (sc->host_ctx)
+//            ff_dpdk_deregister_if(sc->host_ctx);
 
         free(sc, M_DEVBUF);
     }
@@ -406,7 +407,7 @@ ff_veth_detach(void *arg)
 {
     struct ff_veth_softc *sc = (struct ff_veth_softc *)arg;
     if (sc) {
-        ff_dpdk_deregister_if(sc->host_ctx);
+        //ff_dpdk_deregister_if(sc->host_ctx);
         free(sc, M_DEVBUF);
     }
 
@@ -417,6 +418,7 @@ void *
 ff_veth_softc_to_hostc(void *softc)
 {
     struct ff_veth_softc *sc = (struct ff_veth_softc *)softc;
-    return (void *)sc->host_ctx;
+    //return (void *)sc->host_ctx;
+    return NULL;
 }
 

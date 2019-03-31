@@ -20,3 +20,6 @@ lib/machine_include/
 lib/vnode_if.h
 lib/vnode_if_newproto.h
 lib/vnode_if_typedef.h
+ixy.c/ixy-fwd
+ixy.c/ixy-pktgen
+.idea

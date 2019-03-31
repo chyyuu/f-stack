@@ -30,8 +30,8 @@
 #include <stdint.h>
 #include <getopt.h>
 #include <ctype.h>
-#include <rte_config.h>
-#include <rte_string_fns.h>
+//#include <rte_config.h>
+//#include <rte_string_fns.h>
 
 #include "ff_config.h"
 #include "ff_ini_parser.h"
@@ -66,6 +66,7 @@ xdigit2val(unsigned char c)
     return val;
 }
 
+#if 0
 static int
 parse_lcore_mask(struct ff_config *cfg, const char *coremask)
 {
@@ -132,6 +133,7 @@ parse_lcore_mask(struct ff_config *cfg, const char *coremask)
 
     return 1;
 }
+#endif
 
 static int
 is_integer(const char *s)
@@ -246,6 +248,7 @@ __strstrip(char *s)
     return s;
 }
 
+#if 0
 static int
 __parse_config_list(uint16_t *arr, int *sz, const char *value) {
     int i, j;
@@ -455,7 +458,7 @@ vdev_cfg_handler(struct ff_config *cfg, const char *section,
 
     return 1;
 }
-
+#endif
 
 static int
 ini_parse_handler(void* user, const char* section, const char* name,
@@ -472,33 +475,33 @@ ini_parse_handler(void* user, const char* section, const char* name,
         pconfig->dpdk.memory = atoi(value);
     } else if (MATCH("dpdk", "no_huge")) {
         pconfig->dpdk.no_huge = atoi(value);
-    } else if (MATCH("dpdk", "lcore_mask")) {
-        pconfig->dpdk.lcore_mask = strdup(value);
-        return parse_lcore_mask(pconfig, pconfig->dpdk.lcore_mask);
-    } else if (MATCH("dpdk", "base_virtaddr")) {
-        pconfig->dpdk.base_virtaddr= strdup(value);
-    } else if (MATCH("dpdk", "port_list")) {
-        return parse_port_list(pconfig, value);
-    } else if (MATCH("dpdk", "nb_vdev")) {
-        pconfig->dpdk.nb_vdev = atoi(value);
-    } else if (MATCH("dpdk", "promiscuous")) {
-        pconfig->dpdk.promiscuous = atoi(value);
-    } else if (MATCH("dpdk", "numa_on")) {
-        pconfig->dpdk.numa_on = atoi(value);
-    } else if (MATCH("dpdk", "tso")) {
-        pconfig->dpdk.tso = atoi(value);
-    } else if (MATCH("dpdk", "vlan_strip")) {
-        pconfig->dpdk.vlan_strip = atoi(value);
-    } else if (MATCH("dpdk", "idle_sleep")) {
-        pconfig->dpdk.idle_sleep = atoi(value);
-    } else if (MATCH("kni", "enable")) {
-        pconfig->kni.enable= atoi(value);
-    } else if (MATCH("kni", "method")) {
-        pconfig->kni.method= strdup(value);
-    } else if (MATCH("kni", "tcp_port")) {
-        pconfig->kni.tcp_port = strdup(value);
-    } else if (MATCH("kni", "udp_port")) {
-        pconfig->kni.udp_port= strdup(value);
+//    } else if (MATCH("dpdk", "lcore_mask")) {
+//        pconfig->dpdk.lcore_mask = strdup(value);
+//        return parse_lcore_mask(pconfig, pconfig->dpdk.lcore_mask);
+//    } else if (MATCH("dpdk", "base_virtaddr")) {
+//        pconfig->dpdk.base_virtaddr= strdup(value);
+//    } else if (MATCH("dpdk", "port_list")) {
+//        return parse_port_list(pconfig, value);
+//    } else if (MATCH("dpdk", "nb_vdev")) {
+//        pconfig->dpdk.nb_vdev = atoi(value);
+//    } else if (MATCH("dpdk", "promiscuous")) {
+//        pconfig->dpdk.promiscuous = atoi(value);
+//    } else if (MATCH("dpdk", "numa_on")) {
+//        pconfig->dpdk.numa_on = atoi(value);
+//    } else if (MATCH("dpdk", "tso")) {
+//        pconfig->dpdk.tso = atoi(value);
+//    } else if (MATCH("dpdk", "vlan_strip")) {
+//        pconfig->dpdk.vlan_strip = atoi(value);
+//    } else if (MATCH("dpdk", "idle_sleep")) {
+//        pconfig->dpdk.idle_sleep = atoi(value);
+//    } else if (MATCH("kni", "enable")) {
+//        pconfig->kni.enable= atoi(value);
+//    } else if (MATCH("kni", "method")) {
+//        pconfig->kni.method= strdup(value);
+//    } else if (MATCH("kni", "tcp_port")) {
+//        pconfig->kni.tcp_port = strdup(value);
+//    } else if (MATCH("kni", "udp_port")) {
+//        pconfig->kni.udp_port= strdup(value);
     } else if (strcmp(section, "freebsd.boot") == 0) {
         if (strcmp(name, "hz") == 0) {
             pconfig->freebsd.hz = atoi(value);
@@ -511,10 +514,10 @@ ini_parse_handler(void* user, const char* section, const char* name,
         }
     } else if (strcmp(section, "freebsd.sysctl") == 0) {
         return freebsd_conf_handler(pconfig, "sysctl", name, value);
-    } else if (strncmp(section, "port", 4) == 0) {
-        return port_cfg_handler(pconfig, section, name, value);
-    } else if (strncmp(section, "vdev", 4) == 0) {
-        return vdev_cfg_handler(pconfig, section, name, value);
+//    } else if (strncmp(section, "port", 4) == 0) {
+//        return port_cfg_handler(pconfig, section, name, value);
+//    } else if (strncmp(section, "vdev", 4) == 0) {
+//        return vdev_cfg_handler(pconfig, section, name, value);
     }
 
     return 1;
@@ -621,10 +624,10 @@ ff_parse_args(struct ff_config *cfg, int argc, char *const argv[])
         return -1;
     }
 
-    if ((uint16_t)cfg->dpdk.proc_id > RTE_MAX_LCORE) {
-        printf("invalid proc_id:%d, use default 0\n", cfg->dpdk.proc_id);
-        cfg->dpdk.proc_id = 0;
-    }
+//    if ((uint16_t)cfg->dpdk.proc_id > RTE_MAX_LCORE) {
+//        printf("invalid proc_id:%d, use default 0\n", cfg->dpdk.proc_id);
+//        cfg->dpdk.proc_id = 0;
+//    }
 
     return 0;
 }

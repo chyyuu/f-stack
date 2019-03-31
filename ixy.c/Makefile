@@ -14,13 +14,14 @@ IXY_PKTGEN_OBJS  := ixy-pktgen.o device.o ixgbe.o memory.o pci.o stats.o
 IXY_FORWARD_NAME := ixy-fwd
 #IXY_FORWARD_OBJS := ixy-fwd.o device.o ixgbe.o memory.o pci.o stats.o virtio.o
 IXY_FORWARD_OBJS := ixy-fwd.o device.o ixgbe.o memory.o pci.o stats.o
-
+IXY_OBJS := device.o ixgbe.o memory.o pci.o stats.o  missing.o
+IXY_LIB := libixy.a
 
 
 .PHONY: all build run clean
 all: build
 
-build: $(IXY_PKTGEN_NAME) $(IXY_FORWARD_NAME)
+build: $(IXY_PKTGEN_NAME) $(IXY_FORWARD_NAME) $(IXY_LIB)
 
 
 $(IXY_PKTGEN_NAME): $(IXY_PKTGEN_OBJS)
@@ -28,6 +29,10 @@ $(IXY_PKTGEN_NAME): $(IXY_PKTGEN_OBJS)
 
 $(IXY_FORWARD_NAME): $(IXY_FORWARD_OBJS)
 	$(CC) -o $@ $^ $(LDFLAGS)
+
+$(IXY_LIB): $(IXY_OBJS)
+#	rm $(IXY_LIB)
+	ar -cr $(IXY_LIB) $(IXY_OBJS)
 
 include Makefile.dep
 Makefile.dep:

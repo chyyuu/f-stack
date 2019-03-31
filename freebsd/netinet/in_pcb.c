@@ -1135,11 +1135,11 @@ if (lport == 0)
             cred);
         if (error)
             return (error);
-        rss = ff_rss_check(ifp->if_softc, faddr.s_addr, laddr.s_addr,
-            fport, lport);
-        if (rss) {
-            break;
-        }
+//        rss = ff_rss_check(ifp->if_softc, faddr.s_addr, laddr.s_addr,
+//            fport, lport);
+//        if (rss) {
+//            break;
+//        }
         lport = 0;
         /* Note:
          * if all ports are completely used, just return.
